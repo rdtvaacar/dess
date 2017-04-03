@@ -62,10 +62,12 @@ class Destek_model extends Model
 
     function mesajlar($tab, $sil)
     {
-        $data = self::tab_menu();
-        $tur  = $data[$tab][2];
+        $data    = self::tab_menu();
+        $tur     = $data[$tab][2];
+        $ayar    = Destek_model::destek_ayar();
+        $user_id = $ayar->user_id_stun;
         return $sorgu = Destek_users_model::leftJoin('destek', 'destek_users.mesaj_id', '=', 'destek.id')
-            ->leftJoin('users', 'users.id', '=', 'destek_users.gon_id')
+            ->leftJoin('users', 'users.' . $user_id, '=', 'destek_users.gon_id')
             ->where('destek_users.uye_id', self::uye_id())
             ->where('destek_users.tur', $tur)
             ->where('destek_users.sil', $sil)
@@ -76,9 +78,11 @@ class Destek_model extends Model
 
     function mesaj_oku($mesaj_id)
     {
+        $ayar    = Destek_model::destek_ayar();
+        $user_id = $ayar->user_id_stun;
         Destek_users_model::where('uye_id', self::uye_id())->where('id', $mesaj_id)->update(['okundu' => 1]);
         return Destek_users_model::leftJoin('destek', 'destek_users.mesaj_id', '=', 'destek.id')
-            ->leftJoin('users', 'users.id', '=', 'destek_users.gon_id')
+            ->leftJoin('users', 'users.' . $user_id, '=', 'destek_users.gon_id')
             ->leftJoin('destek_dosya', 'destek_dosya.mesaj_id', '=', 'destek_users.mesaj_id')
             ->where('destek_users.uye_id', self::uye_id())
             ->where('destek_users.id', $mesaj_id)
