@@ -173,7 +173,8 @@ class Destek_model extends Model
             'uye_id'   => $uye_id,
             'mesaj_id' => $mesaj_id,
             'gon_id'   => $gon_id,
-            'tur'      => 1
+            'tur'      => 1,
+            'okundu'   => 1
         ];
         Destek_users_model::insert($data3);
         return $mesaj_id;
