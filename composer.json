@@ -1,0 +1,14 @@
+{
+    "name": "acr/des",
+    "description": "Destek Mod",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "acr",
+            "email": "acarbey15@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
