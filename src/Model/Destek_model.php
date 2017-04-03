@@ -26,7 +26,8 @@ class Destek_model extends Model
             if (empty($ayar)) {
                 return 1;
             } else {
-                return Auth::user()->$ayar->user_id_stun;
+                $stun = $ayar->user_id_stun;
+                return Auth::user()->$stun;
             }
         } else {
             return 1;
