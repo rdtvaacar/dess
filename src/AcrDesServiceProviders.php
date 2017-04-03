@@ -12,4 +12,8 @@ class AcrDesServiceProviders extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/Views', 'acr_des_v');
     }
 
+    public function register()
+    {
+
+    }
 }
