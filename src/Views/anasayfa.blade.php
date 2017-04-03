@@ -4,11 +4,12 @@
     <section class="content">
         <div class="row">
         <?php echo $destek->menu($tab);
-        $mesajlar = $data->mesajlar($tab, 0);
+        $mesajlar = $destek_model->mesajlar($tab, 0);
         ?>
 
         <!-- /.col -->
             <div class="col-md-9">
+                <?php echo $msg; ?>
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title"></h3>

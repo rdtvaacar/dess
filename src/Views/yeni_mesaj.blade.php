@@ -7,7 +7,7 @@
 
         echo $destek->menu($tab);
         if ($mesaj_id) {
-            $mesaj        = $data->mesaj_oku($mesaj_id);
+            $mesaj        = $destek_model->mesaj_oku($mesaj_id);
             $konu         = 'RE: ' . $mesaj->konu;
             $mesaj_icerik = '<br><br>.............................................................. <br>Cevabı üst satıra yazınız<br>' . $mesaj->du_cd . '<br>' . $mesaj->mesaj;
             $uye_id       = $mesaj->gon_id;

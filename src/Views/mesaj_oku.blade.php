@@ -3,7 +3,7 @@
     <section class="content">
         <div class="row">
         <?php echo $destek->menu($tab);
-        $mesaj = $data->mesaj_oku($mesaj_id);
+        $mesaj = $destek_model->mesaj_oku($mesaj_id);
 
         ?>
         <!-- /.col -->
@@ -26,7 +26,8 @@
                         <!-- /.mailbox-read-info -->
                         <div class="mailbox-controls with-border text-center">
                             <div class="btn-group">
-                                <a href="/destek_sil?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="Delete">
+                                <a href="/acr/des/sil_link?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body"
+                                   title="Delete">
                                     <i class="fa fa-trash-o"></i></a>
                                 <a href="/acr/des/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="Cevapla">
                                     <i class="fa fa-reply"></i></a>
@@ -51,7 +52,7 @@
                                     <a href="/uploads/<?php echo $mesaj->dosya_isim ?>" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> <?php echo $mesaj->dosya_org_isim ?></a>
                                     <span class="mailbox-attachment-size">
                                     <?php echo $mesaj->size ?> MB
-                          <a href="/destek_dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>" class="btn btn-default btn-xs pull-right"><i
+                          <a href="/acr/des/dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>" class="btn btn-default btn-xs pull-right"><i
                                       class="fa fa-cloud-download"></i></a>
                         </span>
                                 </div>
@@ -65,7 +66,7 @@
                         <div class="pull-right">
                             <a href="/acr/des/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>" class="btn btn-default"><i class="fa fa-reply"></i> Cevapla</a>
                         </div>
-                        <a href="/destek_sil?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>" class="btn btn-default"><i class="fa fa-trash-o"></i> Sil</a>
+                        <a href="/acr/des/destek_sil?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>" class="btn btn-default"><i class="fa fa-trash-o"></i> Sil</a>
                     </div>
                     <!-- /.box-footer -->
                 </div>

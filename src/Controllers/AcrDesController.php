@@ -5,21 +5,24 @@ namespace Acr\Des\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Acr\Des\Model\Destek_model;
+use Acr\Des\Model\Destek_dosya_model;
 use Auth;
 use Acr\Des\Controllers\MailController;
 
 class AcrDesController extends Controller
 {
     protected $basarili           = '<div class="alert alert-success">Başarıyla Eklendi</div>';
+    protected $silindi            = '<div class="alert alert-warning">Başarıyla Silindi</div>';
     protected $dosyaBuyuk         = '<div class="alert alert-danger">Yüklemeye çalıştığınız dosyanın boyutu 20 MB\'den büyük</div>';
     protected $gonderildi         = '<div class="alert alert-success">Mesajınız başarıyla gönderildi, en kısa zamanda size yanıt vermeye çalışacağız, teşekkür ederiz.</div>';
     protected $basariliGuncelleme = '<div class="alert alert-success">Başarıyla Güncellendi</div>';
 
     function login(Request $request)
     {
+        $destek_model = new Destek_model();
         if ($request->server('SERVER_NAME') == 'destek2') {
             Auth::loginUsingId(1, true);
-            echo Auth::user()->id;
+            echo $destek_model->uye_id();
         }
     }
 
@@ -39,12 +42,12 @@ class AcrDesController extends Controller
 
     function ayar(Request $request)
     {
-        $tab      = $request->input('tab');
-        $mesaj_id = $request->input('mesaj_id');
-        $msg      = $request->session()->get('msg');
-        $destek   = new AcrDesController();
-        $data     = new Destek_model();
-        return view('acr_des_v::destek_ayar', compact('destek', 'tab', 'data', 'mesaj_id', 'msg'));
+        $tab          = $request->input('tab');
+        $mesaj_id     = $request->input('mesaj_id');
+        $msg          = $request->session()->get('msg');
+        $destek       = new AcrDesController();
+        $destek_model = new Destek_model();
+        return view('acr_des_v::destek_ayar', compact('destek', 'tab', 'destek_model', 'mesaj_id', 'msg'));
     }
 
     function index(Request $request)
@@ -53,20 +56,34 @@ class AcrDesController extends Controller
         if (empty($tab)) {
             $tab = 'destek_gelen';
         }
-        $mesaj_id = $request->input('mesaj_id');
-        $msg      = $request->input('msg');
-        $destek   = new AcrDesController();
-        $data     = new Destek_model();
-        return view('acr_des_v::anasayfa', compact('destek', 'tab', 'data', 'mesaj_id', 'msg'));
+        $mesaj_id     = $request->input('mesaj_id');
+        $msg          = $request->session()->get('msg');
+        $destek       = new AcrDesController();
+        $destek_model = new Destek_model();
+        return view('acr_des_v::anasayfa', compact('destek', 'tab', 'destek_model', 'mesaj_id', 'msg'));
     }
+
     function yeni_mesaj(Request $request)
     {
-        $tab      = '';
-        $mesaj_id = $request->input('mesaj_id');
-        $msg      = $request->input('msg');
-        $destek   = new AcrDesController();
-        $data     = new Destek_model();
-        return view('acr_des_v::yeni_mesaj', compact('destek', 'tab', 'data', 'mesaj_id', 'msg'));
+        $tab          = '';
+        $mesaj_id     = $request->input('mesaj_id');
+        $msg          = $request->session()->get('msg');
+        $destek       = new AcrDesController();
+        $destek_model = new Destek_model();
+        return view('acr_des_v::yeni_mesaj', compact('destek', 'tab', 'destek_model', 'mesaj_id', 'msg'));
+    }
+
+    function mesaj_oku(Request $request)
+    {
+        $tab = $request->input('tab');
+        if (empty($tab)) {
+            $tab = 'destek_gelen';
+        }
+        $mesaj_id     = $request->input('mesaj_id');
+        $msg          = $request->session()->get('msg');
+        $destek       = new AcrDesController();
+        $destek_model = new Destek_model();
+        return view('acr_des_v::mesaj_oku', compact('destek', 'tab', 'destek_model', 'mesaj_id', 'msg'));
     }
 
     function anasayfa(Request $request)
@@ -75,35 +92,41 @@ class AcrDesController extends Controller
         if (empty($tab)) {
             $tab = 'destek_gelen';
         }
-        $mesaj_id = $request->input('mesaj_id');
-        $msg      = $request->input('msg');
-        $destek   = new AcrDesController();
-        $data     = new Destek_model();
-        return view('acr_des_v::anasayfa', compact('destek', 'tab', 'data', 'mesaj_id', 'msg'));
+        $mesaj_id     = $request->input('mesaj_id');
+        $msg          = $request->session()->get('msg');
+        $destek       = new AcrDesController();
+        $destek_model = new Destek_model();
+        return view('acr_des_v::anasayfa', compact('destek', 'tab', 'destek_model', 'mesaj_id', 'msg'));
     }
 
     function sil(Request $request)
     {
-        $destek_id = $request->input('destek_id');
-        $tab       = $request->input('tab');
-        $data      = new Destek_model();
+        $destek_id    = $request->input('destek_id');
+        $tab          = $request->input('tab');
+        $destek_model = new Destek_model();
         if ($tab == 'destek_cop') {
-            $data->sil($destek_id);
+            $destek_model->sil($destek_id);
         } else {
-            $data->cope_tasi($destek_id);
+            $destek_model->cope_tasi($destek_id);
         }
         return $destek_id;
     }
 
+    function sil_link(Request $request)
+    {
+        self::tek_sil($request);
+        return redirect()->to('/acr/des?tab=' . $request->input('tab'))->with('msg', $this->silindi);
+    }
+
     function tek_sil(Request $request)
     {
-        $destek_id = $request->input('destek_id');
-        $tab       = $request->input('tab');
-        $data      = new Destek_model();
+        $destek_id    = $request->input('destek_id');
+        $tab          = $request->input('tab');
+        $destek_model = new Destek_model();
         if ($tab == 'destek_cop') {
-            $data->tek_sil($destek_id);
+            $destek_model->tek_sil($destek_id);
         } else {
-            $data->tek_cope_tasi($destek_id);
+            $destek_model->tek_cope_tasi($destek_id);
         }
         return $destek_id;
     }
@@ -111,19 +134,19 @@ class AcrDesController extends Controller
     function menu($tab)
     {
         $destek_model = new Destek_model();
-        $data         = $destek_model->tab_menu();
+        $tab_menu     = $destek_model->tab_menu();
         $link         = '';
-        foreach ($data as $datum => $datas) {
-            $okunmayan = $destek_model->gelen_okunmayan_sayi($datas[2]) == 0 ? '' : '<span style="color: red;">' . $destek_model->gelen_okunmayan_sayi($datas[2]) . '</span>';
+        foreach ($tab_menu as $datum => $tab_menus) {
+            $okunmayan = $destek_model->gelen_okunmayan_sayi($tab_menus[2]) == 0 ? '' : '<span style="color: red;">' . $destek_model->gelen_okunmayan_sayi($tab_menus[2]) . '</span>';
             $active    = $datum == $tab ? 'class="active"' : '';
-            $link      .= '<li ' . $active . ' ><a href="/acr/des?tab=' . $datum . '"><i class="fa fa-' . $datas[1] . '"></i> ' . $datas[0] . ' ' . $okunmayan . ' </a></li>';
+            $link      .= '<li ' . $active . ' ><a href="/acr/des?tab=' . $datum . '"><i class="fa fa-' . $tab_menus[1] . '"></i> ' . $tab_menus[0] . ' ' . $okunmayan . ' </a></li>';
         }
         if ($tab == 'destek_ayar') {
             $activeAyar = 'class="active"';
         } else {
             $activeAyar = '';
         }
-        if (Auth::user()->id == 1) {
+        if ($destek_model->uye_id() == 1) {
             $admin_ayar = '<li ' . $activeAyar . '><a href="/acr/des/ayar?tab=destek_ayar"><i class="fa  fa-gears"></i>  Admin Ayarlar</a></li>';
         } else {
             $admin_ayar = '';
@@ -153,13 +176,14 @@ class AcrDesController extends Controller
         $okunduStyle = $item->okundu == 1 ? 'style="color:#B0C4DE"' : '';
         $konu        = $item->okundu == 1 ? $item->konu : '<b>' . $item->konu . '</b>';
         $item->name  = empty($item->name) ? $item->ad : $item->name;
+        $item->name  = empty($item->name) ? 'İsimsiz Üye' : $item->name;
         $veri        =
             '<tr id="destek_satir_' . $item->destek_users_id . '">
                    <td><input id="destek_id[]" name="destek_id[]" value="' . $item->destek_users_id . '"  type="checkbox"></td>
                    <td class="mailbox-name"><a ' . $okunduStyle . ' href="/acr/des/mesaj_oku?mesaj_id=' . $item->destek_users_id . '&tab=' . $tab . '">' . $item->name . '</a></td>
                    <td class="mailbox-subject">' . $konu . '</td>
                    <td class="mailbox-attachment"></td>
-                   <td align="right" class="mailbox-date">' . $item->d_cd . '</td>
+                   <td align="right" class="mailbox-date">' . date('d/m/Y H:i', strtotime($item->d_cd)) . '</td>
              </tr>';
         return $veri;
     }
@@ -167,8 +191,8 @@ class AcrDesController extends Controller
     function mesajlar($tab, $sil)
     {
         $destek_model = new Destek_model();
-        $data         = $destek_model->tab_menu();
-        $tur          = $data[$tab][2];
+        $destek_model = $destek_model->tab_menu();
+        $tur          = $destek_model[$tab][2];
         $mesajlar     = $destek_model->mesajlar($tur, $sil);
         return $mesajlar;
     }
@@ -190,7 +214,7 @@ class AcrDesController extends Controller
         $dosya        = $request->file('attachment');
         $uye_id       = $request->input('uye_id');
 
-        $gon_id = Auth::user()->id;;
+        $gon_id = $destek_model->uye_id();;
         $ayar      = $destek_model->destek_ayar();
         $mesaj_id  = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
         $alan      = $destek_model->alan($uye_id);
@@ -215,9 +239,11 @@ class AcrDesController extends Controller
         return redirect()->to('/acr/des/yeni_mesaj')->with('msg', $this->gonderildi);
     }
 
-    function destek_dosya_indir($destek_dosya_id)
+    function dosya_indir(Request $request)
     {
+        $destek_model       = new Destek_model();
         $destek_dosya_model = new Destek_dosya_model();
+        $destek_dosya_id    = $request->input('dosya_id');
         $dosyaSorgu         = $destek_dosya_model->where('id', $destek_dosya_id);
         $dosya_sayi         = $dosyaSorgu->count();
         if ($dosya_sayi > 0) {
@@ -225,7 +251,7 @@ class AcrDesController extends Controller
             $izinler = [
                 $dosya->uye_id, $dosya->gon_id
             ];
-            if (in_array(Auth::user()->id, $izinler)) {
+            if (in_array($destek_model->uye_id(), $izinler)) {
                 return response()->download(public_path('/uploads/' . $dosya->dosya_isim), $dosya->dosya_org_isim . '.' . $dosya->type);
             } else {
                 return 'Dosya erişiminize izniniz bulunmuyor.';
@@ -238,22 +264,16 @@ class AcrDesController extends Controller
 
     function ayar_kaydet(Request $request)
     {
-        $data                    = $request->All();
-        $destek_model            = new Destek_model();
-        $data                    = (object)$data;
-        $data->destek_mail       = empty($data->destek_mail) ? '' : $data->destek_mail;
-        $data->sms_user          = empty($data->sms_user) ? '' : $data->sms_user;
-        $data->sms_sifre         = empty($data->sms_sifre) ? '' : $data->sms_sifre;
-        $data->destek_admin_isim = empty($data->destek_admin_isim) ? 'Admin' : $data->destek_admin_isim;
-        $data->sms_aktiflik      = empty($data->sms_aktiflik) ? 0 : $data->sms_aktiflik;
-        $data->sms_baslik        = empty($data->sms_baslik) ? 0 : $data->sms_baslik;
-        $veri                    = [
-            'destek_mail'       => $data->destek_mail,
-            'sms_user'          => $data->sms_user,
-            'sms_sifre'         => $data->sms_sifre,
-            'destek_admin_isim' => $data->destek_admin_isim,
-            'sms_aktiflik'      => $data->sms_aktiflik,
-            'sms_baslik'        => $data->sms_baslik,
+        $destek_model = new Destek_model();
+        $veri         = [
+            'destek_mail'       => $request->input('destek_mail'),
+            'sms_user'          => $request->input('sms_user'),
+            'sms_sifre'         => $request->input('sms_sifre'),
+            'destek_admin_isim' => $request->input('destek_admin_isim'),
+            'sms_aktiflik'      => $request->input('sms_aktiflik'),
+            'sms_baslik'        => $request->input('sms_baslik'),
+            'user_name_stun'    => $request->input('user_name_stun'),
+            'user_id_stun'      => $request->input('user_id_stun'),
         ];
         $destek_model->destek_ayar_kaydet($veri);
         return redirect()->back()->with('msg', $this->basariliGuncelleme);

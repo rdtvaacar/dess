@@ -5,6 +5,7 @@ namespace Acr\Des\Model;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use Auth;
+use Acr\Des\Model\Destek_ayar_model;
 
 class Destek_model extends Model
 
@@ -21,11 +22,16 @@ class Destek_model extends Model
     function uye_id()
     {
         if (Auth::check()) {
-            return $this->uye_id = Auth::user()->id;
-
+            $ayar = self::destek_ayar();
+            if (empty($ayar)) {
+                return 1;
+            } else {
+                return $ayar->user_id_stun;
+            }
         } else {
-            return $this->uye_id = 0;
+            return 1;
         }
+
 
     }
 
@@ -50,7 +56,7 @@ class Destek_model extends Model
 
     function gelen_okunmayan_sayi($tur)
     {
-        return Destek_users_model::where('destek_users.uye_id', Auth::user()->id)->where('okundu', 0)->where('tur', $tur)->where('sil', 0)->count();
+        return Destek_users_model::where('destek_users.uye_id', self::uye_id())->where('okundu', 0)->where('tur', $tur)->where('sil', 0)->count();
     }
 
     function mesajlar($tab, $sil)
@@ -59,7 +65,7 @@ class Destek_model extends Model
         $tur  = $data[$tab][2];
         return $sorgu = Destek_users_model::leftJoin('destek', 'destek_users.mesaj_id', '=', 'destek.id')
             ->leftJoin('users', 'users.id', '=', 'destek_users.gon_id')
-            ->where('destek_users.uye_id', Auth::user()->id)
+            ->where('destek_users.uye_id', self::uye_id())
             ->where('destek_users.tur', $tur)
             ->where('destek_users.sil', $sil)
             ->orderBy('destek.id', 'desc')
@@ -69,11 +75,11 @@ class Destek_model extends Model
 
     function mesaj_oku($mesaj_id)
     {
-        Destek_users_model::where('uye_id', Auth::user()->id)->where('id', $mesaj_id)->update(['okundu' => 1]);
+        Destek_users_model::where('uye_id', self::uye_id())->where('id', $mesaj_id)->update(['okundu' => 1]);
         return Destek_users_model::leftJoin('destek', 'destek_users.mesaj_id', '=', 'destek.id')
             ->leftJoin('users', 'users.id', '=', 'destek_users.gon_id')
             ->leftJoin('destek_dosya', 'destek_dosya.mesaj_id', '=', 'destek_users.mesaj_id')
-            ->where('destek_users.uye_id', Auth::user()->id)
+            ->where('destek_users.uye_id', self::uye_id())
             ->where('destek_users.id', $mesaj_id)
             ->select('destek_dosya.*', 'destek.*', 'users.*', 'destek_users.*', 'users.id as uye_id', 'destek_dosya.id as destek_dosya_id', 'destek.id as destek_id', 'destek_users.id as destek_users_id', 'users.created_at as users_cd', 'destek.created_at as d_cd', 'destek_users.created_at as du_cd')
             ->first();
@@ -105,7 +111,7 @@ class Destek_model extends Model
 
     function sil($destek_id)
     {
-        $destek_user_sorgu = Destek_users_model::where('uye_id', Auth::user()->id)->whereIn('id', $destek_id);
+        $destek_user_sorgu = Destek_users_model::where('uye_id', self::uye_id())->whereIn('id', $destek_id);
         $destek_user_sorgu->update(['tur' => 2, 'sil' => 1]);
         $destek_user_satir = $destek_user_sorgu->first();
         self::tum_dosya_sil($destek_user_satir->mesaj_id);
@@ -113,17 +119,17 @@ class Destek_model extends Model
 
     function cope_tasi($destek_id)
     {
-        Destek_users_model::where('uye_id', Auth::user()->id)->whereIn('id', $destek_id)->update(['tur' => 2]);
+        Destek_users_model::where('uye_id', self::uye_id())->whereIn('id', $destek_id)->update(['tur' => 2]);
     }
 
     function tek_sil($destek_id)
     {
-        Destek_users_model::where('uye_id', Auth::user()->id)->where('id', $destek_id)->update(['tur' => 2, 'sil' => 1]);
+        Destek_users_model::where('uye_id', self::uye_id())->where('id', $destek_id)->update(['tur' => 2, 'sil' => 1]);
     }
 
     function tek_cope_tasi($destek_id)
     {
-        Destek_users_model::where('uye_id', Auth::user()->id)->where('id', $destek_id)->update(['tur' => 2]);
+        Destek_users_model::where('uye_id', self::uye_id())->where('id', $destek_id)->update(['tur' => 2]);
     }
 
     function gonderen($gon_id)

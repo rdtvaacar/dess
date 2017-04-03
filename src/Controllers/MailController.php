@@ -25,8 +25,8 @@ class MailController
         );
         if (Auth::check()) {
             $user_name = empty(Auth::user()->name) ? Auth::user()->ad : Auth::user()->name;
-            $from      = Auth::user()->id == 1 ? $ayar->destek_mail : Auth::user()->email;
-            if (Auth::user()->id == 1) {
+            $from      = $destek_model->uye_id() == 1 ? $ayar->destek_mail : Auth::user()->email;
+            if ($destek_model->uye_id() == 1) {
                 $user_name = $ayar->destek_admin_isim;
             }
         } else {
