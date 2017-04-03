@@ -2,6 +2,7 @@
 
 namespace Acr\Des;
 
+use Acr\Des\Controllers\AcrDesController;
 use Illuminate\Support\ServiceProvider;
 
 class AcrDesServiceProviders extends ServiceProvider
@@ -14,6 +15,8 @@ class AcrDesServiceProviders extends ServiceProvider
 
     public function register()
     {
-
+        $this->app->bind('acr-dess', function () {
+            return new AcrDesController();
+        });
     }
 }
