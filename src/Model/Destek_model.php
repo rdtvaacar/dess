@@ -72,7 +72,7 @@ class Destek_model extends Model
             ->where('destek_users.tur', $tur)
             ->where('destek_users.sil', $sil)
             ->orderBy('destek.id', 'desc')
-            ->select('destek.*', 'users.*', 'destek_users.*', 'users.id as uye_id', 'destek.id as destek_id', 'destek_users.id as destek_users_id', 'users.created_at as users_cd', 'destek.created_at as d_cd', 'destek_users.created_at as du_cd')
+            ->select('destek.*', 'users.*', 'destek_users.*', 'users.' . $user_id . ' as uye_id', 'destek.id as destek_id', 'destek_users.id as destek_users_id', 'users.created_at as users_cd', 'destek.created_at as d_cd', 'destek_users.created_at as du_cd')
             ->paginate(50);
     }
 
@@ -86,7 +86,7 @@ class Destek_model extends Model
             ->leftJoin('destek_dosya', 'destek_dosya.mesaj_id', '=', 'destek_users.mesaj_id')
             ->where('destek_users.uye_id', self::uye_id())
             ->where('destek_users.id', $mesaj_id)
-            ->select('destek_dosya.*', 'destek.*', 'users.*', 'destek_users.*', 'users.id as uye_id', 'destek_dosya.id as destek_dosya_id', 'destek.id as destek_id', 'destek_users.id as destek_users_id', 'users.created_at as users_cd', 'destek.created_at as d_cd', 'destek_users.created_at as du_cd')
+            ->select('destek_dosya.*', 'destek.*', 'users.*', 'destek_users.*', 'users.' . $user_id . ' as uye_id', 'destek_dosya.id as destek_dosya_id', 'destek.id as destek_id', 'destek_users.id as destek_users_id', 'users.created_at as users_cd', 'destek.created_at as d_cd', 'destek_users.created_at as du_cd')
             ->first();
     }
 
@@ -139,15 +139,17 @@ class Destek_model extends Model
 
     function gonderen($gon_id)
     {
+        $ayar = Destek_model::destek_ayar();
         $user     = new User();
-        $gonderen = $user->where('id', $gon_id)->first()->name;
+        $gonderen = $user->where($ayar->user_id_stun, $gon_id)->first()->name;
         return $gonderen;
     }
 
     function alan($uye_id)
     {
+        $ayar = Destek_model::destek_ayar();
         $user = new User();
-        $alan = $user->where('id', $uye_id)->first();
+        $alan = $user->where($ayar->user_id_stun, $uye_id)->first();
         return $alan;
     }
 
