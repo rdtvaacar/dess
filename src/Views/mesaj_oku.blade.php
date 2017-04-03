@@ -49,7 +49,7 @@
                         <ul class="mailbox-attachments clearfix">
                             <li>
                                 <div class="mailbox-attachment-info">
-                                    <a href="/uploads/<?php echo $mesaj->dosya_isim ?>" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> <?php echo $mesaj->dosya_org_isim ?></a>
+                                    <a href="/acr/des/dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> <?php echo $mesaj->dosya_org_isim ?></a>
                                     <span class="mailbox-attachment-size">
                                     <?php echo $mesaj->size ?> MB
                           <a href="/acr/des/dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>" class="btn btn-default btn-xs pull-right"><i
