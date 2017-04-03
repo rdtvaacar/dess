@@ -276,6 +276,7 @@ class AcrDesController extends Controller
             'sms_baslik'        => $request->input('sms_baslik'),
             'user_name_stun'    => $request->input('user_name_stun'),
             'user_id_stun'      => $request->input('user_id_stun'),
+            'user_email_stun'   => $request->input('user_email_stun'),
         ];
         $destek_model->destek_ayar_kaydet($veri);
         return redirect()->back()->with('msg', $this->basariliGuncelleme);

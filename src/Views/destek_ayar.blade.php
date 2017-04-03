@@ -16,6 +16,7 @@
             $sms_aktiflik      = '';
             $user_name_stun    = '';
             $user_id_stun      = '';
+            $user_email_stun   = '';
         } else {
             $destek_mail       = $ayar->destek_mail;
             $sms_user          = $ayar->sms_user;
@@ -25,6 +26,7 @@
             $sms_aktiflik      = $ayar->sms_aktiflik;
             $user_name_stun    = $ayar->user_name_stun;
             $user_id_stun      = $ayar->user_id_stun;
+            $user_email_stun   = $ayar->user_email_stun;
         }
         if ($destek_model->uye_id() == 1) {
         ?>
@@ -59,6 +61,9 @@
                             </div>
                             <div class="form-group">
                                 <input name="user_id_stun" id="user_id_stun" class="form-control" placeholder="Database user tablo ID'si" value="<?php echo $user_id_stun ?>">
+                            </div>
+                            <div class="form-group">
+                                <input name="user_email_stun" id="user_email_stun" class="form-control" placeholder="Database user tablo email ismi" value="<?php echo $user_email_stun ?>">
                             </div>
                             <div class="form-group">
                                 <input <?php echo $sms_aktiflik == 1 ? 'checked="checked"' : '';?> name="sms_aktiflik" id="sms_aktiflik" type="checkbox" value="1"/> <label for="sms_aktiflik">SMS Gönderimi
