@@ -13,6 +13,7 @@ class MailController
     {
         $destek_model = new Destek_model();
         $ayar         = $destek_model->destek_ayar();
+        $email        = $ayar->user_email_stun;
         $user         = array(
             'email'   => $mail,
             'isim'    => $isim,
@@ -24,8 +25,8 @@ class MailController
             'isim' => $user['isim'],
         );
         if (Auth::check()) {
-            $user_name = empty(Auth::user()->name) ? Auth::user()->ad : Auth::user()->name;
-            $from      = $destek_model->uye_id() == 1 ? $ayar->destek_mail : Auth::user()->email;
+            $user_name = empty(Auth::user()->name) ? Auth::user()->ad : Auth::user()->$email;
+            $from      = $destek_model->uye_id() == 1 ? $ayar->destek_mail : Auth::user()->$email;
             if ($destek_model->uye_id() == 1) {
                 $user_name = $ayar->destek_admin_isim;
             }

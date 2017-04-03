@@ -32,8 +32,6 @@ class Destek_model extends Model
         } else {
             return 1;
         }
-
-
     }
 
     function tab_menu()
