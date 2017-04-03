@@ -65,6 +65,8 @@
                             <div class="form-group">
                                 <input name="user_email_stun" id="user_email_stun" class="form-control" placeholder="Database user tablo email ismi" value="<?php echo $user_email_stun ?>">
                             </div>
+
+
                             <div class="form-group">
                                 <input <?php echo $sms_aktiflik == 1 ? 'checked="checked"' : '';?> name="sms_aktiflik" id="sms_aktiflik" type="checkbox" value="1"/> <label for="sms_aktiflik">SMS Gönderimi
                                     Aktif</label>
