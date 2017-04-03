@@ -215,8 +215,9 @@ class AcrDesController extends Controller
         $uye_id       = $request->input('uye_id');
 
         $gon_id = $destek_model->uye_id();;
-        $ayar      = $destek_model->destek_ayar();
-        $mesaj_id  = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
+        $ayar     = $destek_model->destek_ayar();
+        $mesaj_id = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
+
         $alan      = $destek_model->alan($uye_id);
         $alan_isim = empty($alan->name) ? $alan->ad : $alan->name;
         if (!empty($dosya)) {

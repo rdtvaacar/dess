@@ -139,7 +139,7 @@ class Destek_model extends Model
 
     function gonderen($gon_id)
     {
-        $ayar = Destek_model::destek_ayar();
+        $ayar     = Destek_model::destek_ayar();
         $user     = new User();
         $gonderen = $user->where($ayar->user_id_stun, $gon_id)->first()->name;
         return $gonderen;
@@ -167,7 +167,15 @@ class Destek_model extends Model
             'gon_id'   => $gon_id,
             'tur'      => 0
         ];
+
         Destek_users_model::insert($data2);
+        $data3 = [
+            'uye_id'   => $uye_id,
+            'mesaj_id' => $mesaj_id,
+            'gon_id'   => $gon_id,
+            'tur'      => 1
+        ];
+        Destek_users_model::insert($data3);
         return $mesaj_id;
     }
 
