@@ -42,6 +42,7 @@
                                     <tbody>
 
                                     <?php
+
                                     foreach ($mesajlar as $item) {
                                         echo $destek->destek_satir($item, $tab);
                                     }

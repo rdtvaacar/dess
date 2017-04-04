@@ -168,9 +168,9 @@ class Destek_model extends Model
 
         Destek_users_model::insert($data2);
         $data3 = [
-            'uye_id'   => $uye_id,
+            'uye_id'   => $gon_id,
             'mesaj_id' => $mesaj_id,
-            'gon_id'   => $gon_id,
+            'gon_id'   => $uye_id,
             'tur'      => 1,
             'okundu'   => 1
         ];
