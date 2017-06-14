@@ -12,4 +12,11 @@ class AcrDesServiceProviders extends ServiceProvider
         include(__DIR__ . '/routes.php');
         $this->loadViewsFrom(__DIR__ . '/Views', 'acr_des_v');
     }
+
+    public function register()
+    {
+        $this->app->bind('AcrDestek', function () {
+            return new AcrDesController();
+        });
+    }
 }
