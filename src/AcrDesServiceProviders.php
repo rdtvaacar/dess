@@ -15,7 +15,7 @@ class AcrDesServiceProviders extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('AcrDestek', function () {
+        $this->app->bind('AcrDes', function () {
             return new AcrDesController();
         });
     }

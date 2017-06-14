@@ -2,6 +2,7 @@
 
 namespace Acr\Des\Controllers;
 
+use Acr\Des\Model\Destek_users_model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Acr\Des\Model\Destek_model;
@@ -16,6 +17,12 @@ class AcrDesController extends Controller
     protected $dosyaBuyuk         = '<div class="alert alert-danger">Yüklemeye çalıştığınız dosyanın boyutu 20 MB\'den büyük</div>';
     protected $gonderildi         = '<div class="alert alert-success">Mesajınız başarıyla gönderildi, en kısa zamanda size yanıt vermeye çalışacağız, teşekkür ederiz.</div>';
     protected $basariliGuncelleme = '<div class="alert alert-success">Başarıyla Güncellendi</div>';
+
+    function gelen()
+    {
+        $destek_model = new Destek_users_model();
+        return $destek_model->where('uye_id', Auth::user()->id)->where('okundu', 0)->count();
+    }
 
     function login(Request $request)
     {
@@ -216,7 +223,7 @@ class AcrDesController extends Controller
 
         $gon_id = $destek_model->uye_id();;
         $ayar     = $destek_model->destek_ayar();
-        $email    = $ayar->user_email_stun;
+        $email    = empty($ayar->user_email_stun) ? 'email' : $ayar->user_email_stun;
         $mesaj_id = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
 
         $alan      = $destek_model->alan($uye_id);
@@ -233,7 +240,7 @@ class AcrDesController extends Controller
                 return redirect()->to('/acr/des/yeni_mesaj')->with('msg', $this->dosyaBuyuk);
             }
         }
-        if (!empty($alan->tel) && $ayar->sms_aktiflik == 1) {
+        if (!empty($alan->tel) && @$ayar->sms_aktiflik == 1) {
             $tel[] = $alan->tel;
             self::smsGonder($_SERVER['SERVER_NAME'] . ' size mesaj gönderdi, sisteme giriş yaparak inceleyebilirsiniz.', $tel, $ayar->sms_user, $ayar->sms_sifre, $ayar->sms_baslik);
         }

@@ -63,7 +63,7 @@ class Destek_model extends Model
         $data    = self::tab_menu();
         $tur     = $data[$tab][2];
         $ayar    = Destek_model::destek_ayar();
-        $user_id = $ayar->user_id_stun;
+        $user_id = empty($ayar->user_id_stun) ? 'id' : $ayar->user_id_stun;
         return $sorgu = Destek_users_model::leftJoin('destek', 'destek_users.mesaj_id', '=', 'destek.id')
             ->leftJoin('users', 'users.' . $user_id, '=', 'destek_users.gon_id')
             ->where('destek_users.uye_id', self::uye_id())
@@ -145,9 +145,10 @@ class Destek_model extends Model
 
     function alan($uye_id)
     {
-        $ayar = Destek_model::destek_ayar();
-        $user = new User();
-        $alan = $user->where($ayar->user_id_stun, $uye_id)->first();
+        $ayar         = Destek_model::destek_ayar();
+        $user         = new User();
+        $user_id_stun = empty($ayar->user_id_stun) ? 'id' : $ayar->user_id_stun;
+        $alan         = $user->where($user_id_stun, $uye_id)->first();
         return $alan;
     }
 

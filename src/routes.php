@@ -12,7 +12,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/destek_sec_sil', 'AcrDesController@sil');
             Route::get('/destek_sil', 'AcrDesController@tek_sil');
             Route::get('/sil_link', 'AcrDesController@sil_link');
-
+            Route::get('/gelen', 'AcrDesController@gelen');
             Route::post('/destek_mesaj_kaydet', 'AcrDesController@destek_mesaj_kaydet');
             Route::get('/destek_dosya_indir', 'AcrDesController@destek_dosya_indir');
         });

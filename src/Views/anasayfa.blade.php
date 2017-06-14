@@ -3,6 +3,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
+        {{AcrDes::gelen()}}
         <?php echo $destek->menu($tab);
         $mesajlar = $destek_model->mesajlar($tab, 0);
         ?>

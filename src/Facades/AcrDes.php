@@ -4,7 +4,7 @@ namespace Acr\Des\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class AcrDestek extends Facade
+class AcrDes extends Facade
 {
     protected static function getFacadeAccessor()
     {
