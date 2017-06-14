@@ -21,7 +21,7 @@ class AcrDesController extends Controller
     function gelen()
     {
         $destek_model = new Destek_users_model();
-        return $destek_model->where('uye_id', Auth::user()->id)->where('okundu', 0)->where('sil', 0)->count();
+        return @$destek_model->where('uye_id', Auth::user()->id)->where('okundu', 0)->where('sil', 0)->count();
     }
 
     function login(Request $request)
