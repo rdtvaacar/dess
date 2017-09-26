@@ -50,7 +50,6 @@
 
                             </div>
                             <!-- /.btn-group -->
-
                         </div>
                         <!-- /.mailbox-controls -->
                         <div class="mailbox-read-message">
