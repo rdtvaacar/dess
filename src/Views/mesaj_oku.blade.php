@@ -13,23 +13,39 @@
                         <h3 class="box-title">Mesaj Oku</h3>
 
                         <div class="box-tools pull-right">
-                            <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Previous"><i class="fa fa-chevron-left"></i></a>
-                            <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Next"><i class="fa fa-chevron-right"></i></a>
+                            <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Previous"><i
+                                        class="fa fa-chevron-left"></i></a>
+                            <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Next"><i
+                                        class="fa fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body no-padding">
                         <div class="mailbox-read-info">
-                            <h3><span style="color: #1b6cbe"><?php echo $mesaj->name = empty($mesaj->name) ? $mesaj->ad : $mesaj->name ?></span> - <?php echo $mesaj->konu ?><br>{{$mesaj->tel}}</h3>
-                            <h5><span class="mailbox-read-time pull-right"><?php echo date('d/m/Y H:i', strtotime($mesaj->du_cd)) ?></span></h5>
+                            <h3>
+                                <span style="color: #1b6cbe"><?php echo $mesaj->name = empty($mesaj->name) ? $mesaj->ad : $mesaj->name ?></span>
+                                - <?php echo $mesaj->konu ?>
+                                <br>{{$mesaj->tel}}
+                                <br>
+                                @if(Auth::user()->id ==1)
+                                    {{$mesaj->uye_id}}
+                                @endif
+                            </h3>
+                            <h5>
+                                <span class="mailbox-read-time pull-right"><?php echo date('d/m/Y H:i', strtotime($mesaj->du_cd)) ?></span>
+                            </h5>
                         </div>
                         <!-- /.mailbox-read-info -->
                         <div class="mailbox-controls with-border text-center">
                             <div class="btn-group">
-                                <a href="/acr/des/sil_link?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body"
+                                <a href="/acr/des/sil_link?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>"
+                                   type="button" class="btn btn-default btn-sm" data-toggle="tooltip"
+                                   data-container="body"
                                    title="Delete">
                                     <i class="fa fa-trash-o"></i></a>
-                                <a href="/acr/des/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="Cevapla">
+                                <a href="/acr/des/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>"
+                                   class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body"
+                                   title="Cevapla">
                                     <i class="fa fa-reply"></i></a>
 
                             </div>
@@ -49,10 +65,13 @@
                         <ul class="mailbox-attachments clearfix">
                             <li>
                                 <div class="mailbox-attachment-info">
-                                    <a href="/acr/des/dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> <?php echo $mesaj->dosya_org_isim ?></a>
+                                    <a href="/acr/des/dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>"
+                                       class="mailbox-attachment-name"><i
+                                                class="fa fa-paperclip"></i> <?php echo $mesaj->dosya_org_isim ?></a>
                                     <span class="mailbox-attachment-size">
                                     <?php echo $mesaj->size ?> MB
-                          <a href="/acr/des/dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>" class="btn btn-default btn-xs pull-right"><i
+                          <a href="/acr/des/dosya_indir?dosya_id=<?php echo $mesaj->destek_dosya_id ?>"
+                             class="btn btn-default btn-xs pull-right"><i
                                       class="fa fa-cloud-download"></i></a>
                         </span>
                                 </div>
@@ -64,9 +83,11 @@
                 <!-- /.box-footer -->
                     <div class="box-footer">
                         <div class="pull-right">
-                            <a href="/acr/des/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>" class="btn btn-default"><i class="fa fa-reply"></i> Cevapla</a>
+                            <a href="/acr/des/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>" class="btn btn-default"><i
+                                        class="fa fa-reply"></i> Cevapla</a>
                         </div>
-                        <a href="/acr/des/destek_sil?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>" class="btn btn-default"><i class="fa fa-trash-o"></i> Sil</a>
+                        <a href="/acr/des/destek_sil?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>"
+                           class="btn btn-default"><i class="fa fa-trash-o"></i> Sil</a>
                     </div>
                     <!-- /.box-footer -->
                 </div>
