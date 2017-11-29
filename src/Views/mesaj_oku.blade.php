@@ -85,7 +85,7 @@
                             <a href="/acr/des/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>" class="btn btn-default"><i
                                         class="fa fa-reply"></i> Cevapla</a>
                         </div>
-                        <a href="/acr/des/destek_sil?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>"
+                        <a href="/acr/des/sil_link?destek_id=<?php echo $mesaj_id ?>&tab=<?php echo $tab ?>"
                            class="btn btn-default"><i class="fa fa-trash-o"></i> Sil</a>
                     </div>
                     <!-- /.box-footer -->

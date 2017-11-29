@@ -234,7 +234,7 @@ class AcrDesController extends Controller
             $isim       = str_replace('.' . $type, '', $dosya->getClientOriginalName());
             $dosya_isim = self::ingilizceYap($isim) . '.' . $type;
             $dosya->move(public_path('/uploads'), $dosya_isim);
-            if ($size < 21 && $size > 0) {
+            if ($size < 21) {
                 $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
             } else {
                 return redirect()->to('/acr/des/yeni_mesaj')->with('msg', $this->dosyaBuyuk);
