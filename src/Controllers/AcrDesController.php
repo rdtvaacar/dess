@@ -182,16 +182,9 @@ class AcrDesController extends Controller
     {
         $okunduStyle = $item->okundu == 1 ? 'style="color:#B0C4DE"' : '';
         $konu        = $item->okundu == 1 ? $item->konu : '<b>' . $item->konu . '</b>';
-        $item->name  = empty($item->name) ? $item->ad : $item->name;
-        $item->name  = empty($item->name) ? 'İsimsiz Üye' : $item->name;
-        $veri        =
-            '<tr id="destek_satir_' . $item->destek_users_id . '">
-                   <td><input id="destek_id[]" name="destek_id[]" value="' . $item->destek_users_id . '"  type="checkbox"></td>
-                   <td class="mailbox-name"><a ' . $okunduStyle . ' href="/acr/des/mesaj_oku?mesaj_id=' . $item->destek_users_id . '&tab=' . $tab . '">' . $item->name . '</a></td>
-                   <td class="mailbox-subject">' . $konu . '</td>
-                   <td class="mailbox-attachment"></td>
-                   <td align="right" class="mailbox-date">' . date('d/m/Y H:i', strtotime($item->d_cd)) . '</td>
-             </tr>';
+        $name  = empty($item->name) ? $item->ad : $item->name;
+        $name  = empty($item->name) ? 'İsimsiz Üye' : $item->name;
+        $veri        = view('acr_des_v::destek_satir', compact('okunduStyle', 'konu','name','item','tab'))->render();
         return $veri;
     }
 
@@ -258,7 +251,8 @@ class AcrDesController extends Controller
         if ($dosya_sayi > 0) {
             $dosya   = $dosyaSorgu->first();
             $izinler = [
-                $dosya->uye_id, $dosya->gon_id
+                $dosya->uye_id,
+                $dosya->gon_id
             ];
             if (in_array($destek_model->uye_id(), $izinler)) {
                 return response()->download(public_path('/uploads/' . $dosya->dosya_isim), $dosya->dosya_org_isim . '.' . $dosya->type);
@@ -317,6 +311,6 @@ class AcrDesController extends Controller
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         $result = curl_exec($ch);
         curl_close($ch);
-        return json_decode(base64_decode($result), TRUE);
+        return json_decode(base64_decode($result), true);
     }
 }

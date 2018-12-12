@@ -40,13 +40,9 @@
                             <div class="table-responsive mailbox-messages">
                                 <table class="table table-hover table-striped">
                                     <tbody>
-
-                                    <?php
-
-                                    foreach ($mesajlar as $item) {
-                                        echo $destek->destek_satir($item, $tab);
-                                    }
-                                    ?>
+                                    @foreach ($mesajlar as $item)
+                                        {!! $destek->destek_satir($item, $tab) !!}
+                                    @endforeach
                                     </tbody>
                                 </table>
                                 <!-- /.table -->
@@ -85,9 +81,9 @@
         function sec_sil() {
             if (confirm('Seçilen öğeleri silmek istediğinizden emin misiniz?') == true) {
                 $.ajax({
-                    type   : 'post',
-                    url    : '/acr/des/destek_sec_sil',
-                    data   : $(".kutu_form").serialize(),
+                    type: 'post',
+                    url: '/acr/des/destek_sec_sil',
+                    data: $(".kutu_form").serialize(),
                     success: function (veri) {
                         $.each(veri, function (key, val) {
                             $('#destek_satir_' + val).hide();
@@ -97,6 +93,7 @@
                 })
             }
         }
+
         function yenile() {
             location.reload();
         }

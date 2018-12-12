@@ -23,8 +23,11 @@
                     <div class="box-body no-padding">
                         <div class="mailbox-read-info">
                             <h3>
-                                <span style="color: #1b6cbe"><?php echo $mesaj->name = empty($mesaj->name) ? $mesaj->ad : $mesaj->name ?></span>
-                                - <?php echo $mesaj->konu ?>
+                                <span style="color: #1b6cbe">
+
+                                    {{ $mesaj->name = empty($mesaj->name) ? $mesaj->ad : $mesaj->name}}
+                                </span>
+                                - {{ $mesaj->konu }}
                                 <br>{{$mesaj->tel}}
                                 <br>
                                 @if(Auth::user()->id ==1)
