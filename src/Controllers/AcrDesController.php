@@ -182,9 +182,9 @@ class AcrDesController extends Controller
     {
         $okunduStyle = $item->okundu == 1 ? 'style="color:#B0C4DE"' : '';
         $konu        = $item->okundu == 1 ? $item->konu : '<b>' . $item->konu . '</b>';
-        $name  = empty($item->name) ? $item->ad : $item->name;
-        $name  = empty($item->name) ? 'İsimsiz Üye' : $item->name;
-        $veri        = view('acr_des_v::destek_satir', compact('okunduStyle', 'konu','name','item','tab'))->render();
+        $name        = empty($item->name) ? $item->ad : $item->name;
+        $name        = empty($item->name) ? 'İsimsiz Üye' : $item->name;
+        $veri        = view('acr_des_v::destek_satir', compact('okunduStyle', 'konu', 'name', 'item', 'tab'))->render();
         return $veri;
     }
 
@@ -222,23 +222,91 @@ class AcrDesController extends Controller
         $alan      = $destek_model->alan($uye_id);
         $alan_isim = empty($alan->name) ? $alan->ad : $alan->name;
         if (!empty($dosya)) {
-            $size       = round($dosya->getClientSize() / 1000000, 2);
-            $type       = strtolower($dosya->getClientOriginalExtension());
-            $isim       = str_replace('.' . $type, '', $dosya->getClientOriginalName());
-            $dosya_isim = self::ingilizceYap($isim) . '.' . $type;
-            $dosya->move(public_path('/uploads'), $dosya_isim);
-            if ($size < 21) {
-                $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
-            } else {
-                return redirect()->to('/acr/des/yeni_mesaj')->with('msg', $this->dosyaBuyuk);
+            $get_mime = $dosya->getMimeType();
+            if ($this->secure_file($get_mime) == 1) {
+                $size       = round($dosya->getClientSize() / 1000000, 2);
+                $type       = strtolower($dosya->getClientOriginalExtension());
+                $isim       = str_replace('.' . $type, '', $dosya->getClientOriginalName());
+                $dosya_isim = self::ingilizceYap($isim) . '.' . $type;
+                $dosya->move(base_path('/public_html/uploads'), $dosya_isim);
+                if ($size < 21) {
+                    $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
+                } else {
+                    return redirect()->to('/acr/des/yeni_mesaj')->with('msg', $this->dosyaBuyuk);
+                }
             }
         }
+
         if (!empty($alan->tel) && @$ayar->sms_aktiflik == 1) {
             $tel[] = $alan->tel;
             self::smsGonder($_SERVER['SERVER_NAME'] . ' size mesaj gönderdi, sisteme giriş yaparak inceleyebilirsiniz.', $tel, $ayar->sms_user, $ayar->sms_sifre, $ayar->sms_baslik);
         }
         $mail->mailGonder('mail.destek', $alan->$email, $alan_isim, $konu . '<br>', $mesaj);
         return redirect()->to('/acr/des/yeni_mesaj')->with('msg', $this->gonderildi);
+    }
+
+    function secure_file($mime)
+    {
+        $data_type = [
+            "application/excel",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.ms-powerpoint",
+            "application/msword",
+            "application/pdf",
+            "application/vnd.ms-excel",
+            "application/x-gtar",
+            "application/x-gunzip",
+            "application/x-gzip",
+            "application/x-zip-compressed",
+            "application/zip",
+            "audio/TSP-audio",
+            "audio/basic",
+            "audio/basic",
+            "audio/midi",
+            "audio/mpeg",
+            "audio/ulaw",
+            "audio/x-aiff",
+            "audio/x-mpegurl",
+            "audio/x-ms-wax",
+            "audio/x-ms-wma",
+            "audio/x-pn-realaudio-plugin",
+            "audio/x-pn-realaudio",
+            "audio/x-realaudio",
+            "audio/x-wav",
+            "image/cmu-raster",
+            "image/gif",
+            "image/ief",
+            "image/jpeg",
+            "image/png",
+            "image/tiff",
+            "image/x-cmu-raster",
+            "image/x-portable-anymap",
+            "image/x-portable-bitmap",
+            "image/x-portable-graymap",
+            "image/x-portable-pixmap",
+            "image/x-rgb",
+            "image/x-xbitmap",
+            "image/x-xwindowdump",
+            "video/dl",
+            "video/fli",
+            "video/flv",
+            "video/gl",
+            "video/mp4",
+            "video/mpeg",
+            "video/quicktime",
+            "video/vnd.vivo",
+            "video/x-fli",
+            "video/x-ms-asf",
+            "video/x-ms-asx",
+            "video/x-ms-wmv",
+            "video/x-msvideo",
+            "video/x-sgi-movie"
+        ];
+        if (in_array($mime, $data_type)) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     function dosya_indir(Request $request)
@@ -255,7 +323,7 @@ class AcrDesController extends Controller
                 $dosya->gon_id
             ];
             if (in_array($destek_model->uye_id(), $izinler)) {
-                return response()->download(public_path('/uploads/' . $dosya->dosya_isim), $dosya->dosya_org_isim . '.' . $dosya->type);
+                return response()->download(base_path('/public_html/uploads/' . $dosya->dosya_isim), $dosya->dosya_org_isim . '.' . $dosya->type);
             } else {
                 return 'Dosya erişiminize izniniz bulunmuyor.';
             }

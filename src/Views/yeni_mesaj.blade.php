@@ -40,7 +40,7 @@
                                 <textarea name="mesaj" id="compose-textarea" class="form-control" style="height: 300px"><?php echo $mesaj_icerik ?></textarea>
                             </div>
                             <div class="form-group">
-                                <div class="btn btn-default btn-file">
+                                <div class=" btn-default btn-file">
                                     <i class="fa fa-paperclip"></i> Dosya
                                     <input type="file" name="attachment">
                                 </div>
