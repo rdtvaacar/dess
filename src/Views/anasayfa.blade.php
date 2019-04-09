@@ -19,6 +19,7 @@
                                 <span class="glyphicon glyphicon-search form-control-feedback"></span>
                             </div>
                         </div>
+
                         <!-- /.box-tools -->
                     </div>
                     <div style="clear:both;"></div>

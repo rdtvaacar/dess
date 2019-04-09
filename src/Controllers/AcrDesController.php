@@ -141,6 +141,7 @@ class AcrDesController extends Controller
     function menu($tab)
     {
         $destek_model = new Destek_model();
+        $ayar         = $destek_model->destek_ayar();
         $tab_menu     = $destek_model->tab_menu();
         $link         = '';
         foreach ($tab_menu as $datum => $tab_menus) {
@@ -158,6 +159,16 @@ class AcrDesController extends Controller
         } else {
             $admin_ayar = '';
         }
+        if (!empty($ayar->remote)) {
+            $footer = '
+         <div class="box-footer">
+              <a href="' . $ayar->remote . '"  class="btn btn-info btn-sm" >Uzaktan Erişim Programı</a>
+          </div>  
+        ';
+        } else {
+            $footer = '';
+        }
+
         return '<div class="col-md-3">
             <a href="/acr/des/yeni_mesaj" class="btn btn-primary btn-block margin-bottom">Yeni Mesaj Gönder</a>
             <div class="box box-solid">
@@ -175,6 +186,7 @@ class AcrDesController extends Controller
                 </div>
                 <!-- /.box-body -->
             </div>
+          ' . $footer . '
         </div>';
     }
 
@@ -209,13 +221,14 @@ class AcrDesController extends Controller
     {
         $mail         = new MailController();
         $destek_model = new Destek_model();
+        $ayar         = $destek_model->destek_ayar();
         $mesaj        = $request->input('mesaj');
         $konu         = $request->input('konu');
         $dosya        = $request->file('attachment');
         $uye_id       = $request->input('uye_id');
 
         $gon_id = $destek_model->uye_id();;
-        $ayar     = $destek_model->destek_ayar();
+
         $email    = empty($ayar->user_email_stun) ? 'email' : $ayar->user_email_stun;
         $mesaj_id = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
 
